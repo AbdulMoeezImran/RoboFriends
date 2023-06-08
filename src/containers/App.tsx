@@ -1,13 +1,29 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { setSearchField, requestRobotsAction } from "../actions";
 import CardList from "../components/CardList";
 import SearchBox from '../components/SearchBox';
-import Scroll from '../components/Scroll';
 import ErrorBoundry from '../components/ErrorBoundry';
 import './App.css';
 
-const mapStateToProps = state => {
+
+type AppProps = {
+    searchField: string;
+    isPending: boolean;
+    robots: Robot[];
+    error: string;
+    onSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onRequestRobots: () => void;
+}
+
+export type Robot = {
+    id: number;
+    name: string;
+    email: string;
+}
+
+
+const mapStateToProps = (state: any) => {
     return {
         searchField: state.searchRobots.searchField,
         isPending: state.requestRobots.isPending,
@@ -16,14 +32,14 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
-        onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+        onSearchChange: (event: ChangeEvent<HTMLInputElement>): void => dispatch(setSearchField(event.target.value)),
         onRequestRobots: () => dispatch(requestRobotsAction())
     }
 }
 
-class App extends Component {
+class App extends Component<AppProps> {
 
     componentDidMount() {
         this.props.onRequestRobots();
@@ -39,11 +55,9 @@ class App extends Component {
             <div className="tc">
                 <h1 className="f1">RoboFriends</h1>
                 <SearchBox searchChange={onSearchChange} />
-                <Scroll>
-                    <ErrorBoundry>
-                        <CardList robots={filteredRobots} />
-                    </ErrorBoundry>
-                </Scroll>
+                <ErrorBoundry>
+                    <CardList robots={filteredRobots} />
+                </ErrorBoundry>
             </div>
     }
 }

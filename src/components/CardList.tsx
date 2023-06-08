@@ -1,17 +1,20 @@
 import React from "react";
+import { Robot } from "../containers/App";
 import Card from "./Card";
 
-const CardList = ({ robots }) => {
+type CardListProps = {
+    robots: Robot[];
+}
+
+const CardList = ({ robots }: CardListProps) => {
     return (
         <div>
             {
-                robots.map((user, i) => {
+                robots.map((robot) => {
                     return (
                         <Card
-                            key={i}
-                            id={robots[i].id}
-                            name={robots[i].name}
-                            email={robots[i].email}
+                            key={robot.id}
+                            robot={robot}
                         />
                     );
                 })
